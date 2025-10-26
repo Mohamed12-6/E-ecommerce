@@ -7,7 +7,7 @@ export default function Layout() {
 
     return (<>
         <Navbar/>
-        <div className="container py-12 mt-6 mx-auto">
+<div className="container mx-auto px-4 sm:px-6 lg:px-8 py-12 mt-6">
         <Outlet/>
         </div>
         <Footer/>

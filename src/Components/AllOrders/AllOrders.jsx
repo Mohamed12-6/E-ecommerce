@@ -5,96 +5,116 @@ import { jwtDecode } from 'jwt-decode'
 import Loading from '../Loading/Loading'
 import { Link } from 'react-router-dom'
 import { Helmet } from 'react-helmet'
+
 export default function AllOrders() {
+  const [orders, setOrders] = useState(null)
+  const { userLogin } = useContext(UserContext)
+  const { id } = jwtDecode(userLogin)
 
-    const [orders, setOrders] = useState(null)
-
-    const { userLogin, setuserLogin } = useContext(UserContext)
-
-    const { id } = jwtDecode(userLogin)
-    // console.log(id)
-
-    async function getUsersOrders() {
-        const options = {
-            // url:`https://ecommerce.routemisr.com/api/v1/orders/user/6407cf6f515bdcf347c09f17`,
-            url: `https://ecommerce.routemisr.com/api/v1/orders/user/${id}`,
-            method: 'GET',
-        }
-
-        const { data } = await axios.request(options)
-        setOrders(data)
-        // console.log(data)
+  async function getUsersOrders() {
+    try {
+      const { data } = await axios.get(
+        `https://ecommerce.routemisr.com/api/v1/orders/user/${id}`
+      )
+      setOrders(data)
+    } catch (err) {
+      console.error(err)
     }
+  }
 
-    useEffect(() => {
-        getUsersOrders()
-    }, [])
+  useEffect(() => {
+    getUsersOrders()
+  }, [])
 
+  return (
+    <>
+      <Helmet>
+        <title>Orders</title>
+      </Helmet>
 
-    return (
-        <>
-            <Helmet>
-    <title> Orders</title>
-  </Helmet>
-            {
-                orders ? <section>
-                    {orders.map((order) => <div key={order.id} className='order p-4 border-2 border-gray-500 rounded-lg border-opacity-25 '>
-                        <header className='flex justify-between items-center'>
-                            <div>
-                                <h2>Orders ID</h2>
-                                <span>#{order.id}</span>
-                            </div>
+      {orders ? (
+        <section className="p-4 space-y-6">
+          {orders.map((order) => (
+            <div
+              key={order.id}
+              className="order p-4 border border-gray-300 rounded-2xl shadow-sm bg-white hover:shadow-md transition-all duration-200"
+            >
+              {/* Header */}
+              <header className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-3 border-b pb-3">
+                <div>
+                  <h2 className="text-gray-700 font-semibold text-sm sm:text-base">
+                    Order ID
+                  </h2>
+                  <span className="text-gray-500 text-sm break-all">#{order.id}</span>
+                </div>
 
-                            <div>
-                                {order.isPaid ?
-                                    <span className='inline-block px-3 py-1 mx-2 bg-lime-500 text-white font-semibold'>
-                                        غير مدفوع
-                                    </span>
-                                    :
-                                    <span className='inline-block px-3 py-1 mx-2 bg-blue-500 text-white font-semibold'>
-                                        قيد التوصيل
-                                    </span>
-                                }
+                <div className="flex flex-wrap gap-2">
+                  {order.isPaid ? (
+                    <span className="px-3 py-1 text-sm rounded-lg bg-lime-500 text-white font-semibold">
+                      مدفوع
+                    </span>
+                  ) : (
+                    <span className="px-3 py-1 text-sm rounded-lg bg-orange-500 text-white font-semibold">
+                      غير مدفوع
+                    </span>
+                  )}
 
-                                {order.isDelivered ? <span className='inline-block px-3 py-1 mx-2 bg-lime-500 text-white font-semibold'>
-                                    تم الاستلام
-                                </span> : <span className='inline-block px-3 py-1 mx-2 bg-blue-500 text-white font-semibold'>
-                                    قيد التوصيل
-                                </span>
-                                }
-                            </div>
-                        </header>
+                  {order.isDelivered ? (
+                    <span className="px-3 py-1 text-sm rounded-lg bg-green-500 text-white font-semibold">
+                      تم الاستلام
+                    </span>
+                  ) : (
+                    <span className="px-3 py-1 text-sm rounded-lg bg-blue-500 text-white font-semibold">
+                      قيد التوصيل
+                    </span>
+                  )}
+                </div>
+              </header>
 
-                        <div className='grid mt-4  md-gap-4 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-6'>
+              {/* Products Grid */}
+              <div className="grid gap-4 mt-4 grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-6">
+                {order.cartItems.map((product) => (
+                  <div
+                    key={product._id}
+                    className="product-item p-3 border border-gray-200 rounded-xl hover:shadow-md transition-all"
+                  >
+                    <img
+                      src={product.product.imageCover}
+                      alt={product._id}
+                      className="w-full rounded-lg object-cover"
+                    />
 
-                            {order.cartItems.map((product) =>
+                    <h3 className="font-semibold text-sm sm:text-base mt-2 line-clamp-2">
+                      <Link
+                        key={product._id}
+                        to={`/productdetails/${product.product.id}/${product.product.category.name}`}
+                        className="hover:text-blue-600 transition-colors"
+                      >
+                        {product.product.title}
+                      </Link>
+                    </h3>
 
-                                <div key={product._id} className='product-item mt-3 mx-1 border-2 border-gray-400 border-opacity-30 p-4 rounded-lg'>
-                                    <img src={product.product.imageCover} alt={product._id} className='w-full' />
+                    <div className="flex justify-between items-center mt-2 text-sm sm:text-base">
+                      <p className="text-gray-700">Count: {product.count}</p>
+                      <span className="font-semibold text-gray-800">
+                        {product.price} L.E
+                      </span>
+                    </div>
+                  </div>
+                ))}
+              </div>
 
-                                    <h3 className='font-bold text-lg line-clamp-2'>
-                                    <Link key={product._id} to={`/productdetails/${product.product.id}/${product.product.category.name}`}>
-                                    {product.product.title}
-                                        </Link>
-
-                                    </h3>
-
-                                    <div className='flex justify-between items-center'>
-                                        <p><span className='font-medium'>Count : {product.count}</span></p>
-                                        <span>{product.price} L.E</span>
-                                    </div>
-                                </div>
-                            )}
-                        </div>
-
-
-                        <p className='m-2 text-gray-600 font-bold'>Your Total Order Price is <span>{order.totalOrderPrice}</span> L.E</p>
-                    </div>)}
-
-
-
-                </section> : <Loading />
-            }
-        </>
-    )
+              {/* Total Price */}
+              <p className="mt-4 text-gray-700 font-semibold text-center sm:text-right">
+                إجمالي الطلب:{" "}
+                <span className="text-blue-600">{order.totalOrderPrice}</span> L.E
+              </p>
+            </div>
+          ))}
+        </section>
+      ) : (
+        <Loading />
+      )}
+    </>
+  )
 }

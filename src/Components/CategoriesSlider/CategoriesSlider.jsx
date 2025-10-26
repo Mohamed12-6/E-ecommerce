@@ -1,72 +1,88 @@
-import axios from 'axios';
-import { useEffect, useState } from 'react';
-import Slider from 'react-slick';
+import axios from "axios";
+import { useEffect, useState } from "react";
+import Slider from "react-slick";
 
 export default function CategoriesSlider() {
-    const [product, setProduct] = useState([]);
-    var settings = {
-        dots: false,
-        infinite: true,
-        speed: 1500,
-        slidesToShow: 8,
-        slidesToScroll: 1,
-        autoplay: true,
+  const [categories, setCategories] = useState([]);
 
-        autoplaySpeed: -1000000,
-        cssEase: "linear",
-        arrows: false,
-        pauseOnHover: true,
-        responsive: [
-            {
-                breakpoint: 1024,
-                settings: {
-                    slidesToShow: 5,
-                    slidesToScroll: 1,
-                },
-            },
-            {
-                breakpoint: 768,
-                settings: {
-                    slidesToShow: 3,
-                    slidesToScroll: 1,
-                },
-            },
-            {
-                breakpoint: 480,
-                settings: {
-                    slidesToShow: 2,
-                    slidesToScroll: 1,
-                },
-            },
-        ],
+  const settings = {
+    dots: false,
+    infinite: true,
+    speed: 1000,
+    slidesToShow: 8,
+    slidesToScroll: 1,
+    autoplay: true,
+    autoplaySpeed: 2000,
+    cssEase: "linear",
+    arrows: false,
+    pauseOnHover: true,
+    responsive: [
+      {
+        breakpoint: 1536, // شاشات XXL
+        settings: {
+          slidesToShow: 7,
+        },
+      },
+      {
+        breakpoint: 1280, // شاشات XL
+        settings: {
+          slidesToShow: 6,
+        },
+      },
+      {
+        breakpoint: 1024, // شاشات LG
+        settings: {
+          slidesToShow: 5,
+        },
+      },
+      {
+        breakpoint: 768, // التابلت
+        settings: {
+          slidesToShow: 3,
+        },
+      },
+      {
+        breakpoint: 480, // الموبايل
+        settings: {
+          slidesToShow: 2,
+        },
+      },
+    ],
+  };
 
-    }
+  function fetchCategories() {
+    axios
+      .get(`https://ecommerce.routemisr.com/api/v1/categories`)
+      .then(({ data }) => setCategories(data.data))
+      .catch((err) => console.log(err));
+  }
 
-    function SliderCategory() {
-        axios.get(`https://ecommerce.routemisr.com/api/v1/categories`)
-            .then(({ data }) => {
-                // console.log(data.data);
-                setProduct(data.data);
-            })
-            .catch((err) => {
-                console.log(err);
-            });
-    }
+  useEffect(() => {
+    fetchCategories();
+  }, []);
 
-    useEffect(() => {
-        SliderCategory();
-    }, []);
+  return (
+    <>
+      <div className="w-[90%] mx-auto my-10">
+        <h2 className="text-2xl font-semibold text-center mb-6">Top Categories</h2>
 
-    return (
-        <>
-            <Slider  {...settings} className='my-10 pb-2 w-[83%] md:w-[90%] m-auto'>
-                {product.map((category) => (
-                    <div key={category.id}>
-                        <img src={category.image} alt={category.name} className="w-full h-[200px]" />
-                        <h3 className="text-center">{category.name}</h3>
-                    </div>
-                ))}
-            </Slider>
-        </>
-    );
+        <Slider {...settings}>
+          {categories.map((category) => (
+            <div key={category._id} className="px-2">
+              <div className="bg-white rounded-2xl shadow hover:shadow-lg transition-all duration-300 dark:bg-gray-800 dark:text-white overflow-hidden">
+                <img
+                  src={category.image}
+                  alt={category.name}
+                  className="w-full h-44 sm:h-48 md:h-52 lg:h-56 object-cover hover:scale-105 transition-transform duration-500"
+                />
+                <h3 className="text-center py-3 text-sm md:text-base font-medium">
+                  {category.name}
+                </h3>
+              </div>
+            </div>
+          ))}
+        </Slider>
+      </div>
+    </>
+  );
 }
