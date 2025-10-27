@@ -34,7 +34,8 @@ export default function Checkout() {
 
       try {
         if (paymentMethod === "online") {
-          const { data } = await checkout(cart.cartId, window.location.origin, values);
+          const { data } = await checkout(cart.cartId, window.location.origin, values)
+
 
           if (data?.status === "success") {
             if (data.session?.url) {
@@ -42,7 +43,9 @@ export default function Checkout() {
               window.location.href = data.session.url;
             } else {
               // لو مفيش Stripe redirect
-             navigate("/allorders");
+                          toast.success("Order placed successfully!");
+
+             window.location.href("/allorders");
             }
           } else {
             toast.error("Failed to initiate online payment");
