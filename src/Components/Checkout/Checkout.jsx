@@ -43,7 +43,7 @@ export default function Checkout() {
             if (data.session?.url) {
               window.location.href = data.session.url;
             } else {
-              window.location.href = import.meta.env.BASE_URL + 'allorders';
+              window.location.href ='/allorders';
             }
           } else {
             toast.error('Failed to initiate online payment');
@@ -54,7 +54,7 @@ export default function Checkout() {
             setCart(null);
             toast.success('Order placed successfully!');
             // توجيه آمن لجميع البيئات
-            window.location.href = import.meta.env.BASE_URL + 'allorders';
+            window.location.href ='/allorders';
           }
         }
       } catch (error) {
