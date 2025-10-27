@@ -133,6 +133,7 @@ export default function Checkout() {
               } rounded-lg p-3 focus:ring-2 focus:ring-green-500 outline-none`}
             />
             {formik.touched.phone && formik.errors.phone && (
+              
               <p className="text-red-500 text-sm mt-1">
                 {formik.errors.phone}
               </p>
