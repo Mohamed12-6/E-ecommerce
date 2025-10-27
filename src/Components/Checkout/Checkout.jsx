@@ -4,12 +4,13 @@ import { CartContext } from "../../Context/CartContext";
 import * as Yup from "yup";
 import toast from "react-hot-toast";
 import { Helmet } from "react-helmet";
+import { useNavigate } from "react-router-dom";
 
 export default function Checkout() {
   const [isLoading, setIsLoading] = useState(false);
   const [paymentMethod, setPaymentMethod] = useState("cash");
   const { cart, setCart, checkout, payByCash } = useContext(CartContext);
-
+  const navigate=useNavigate()
   const validationSchema = Yup.object({
     details: Yup.string().required("Details are required"),
     phone: Yup.string().required("Phone is required"),
@@ -41,7 +42,7 @@ export default function Checkout() {
               window.location.href = data.session.url;
             } else {
               // لو مفيش Stripe redirect
-              window.location.assign("/allorders");
+             navigate("/allorders");
             }
           } else {
             toast.error("Failed to initiate online payment");
@@ -51,7 +52,7 @@ export default function Checkout() {
           if (data?.status === "success") {
             setCart(null);
             toast.success("Order placed successfully!");
-            window.location.assign("/allorders"); // ارجع مباشرة للـ allorders
+            navigate("/allorders"); 
           }
         }
       } catch (error) {
