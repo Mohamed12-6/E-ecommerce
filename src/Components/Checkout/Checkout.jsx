@@ -1,7 +1,6 @@
 import { useFormik } from 'formik';
 import { useContext, useState } from 'react';
 import { CartContext } from '../../Context/CartContext';
-import { useNavigate } from 'react-router-dom';
 import * as Yup from 'yup';
 import toast from 'react-hot-toast';
 import { Helmet } from 'react-helmet';
@@ -10,7 +9,12 @@ export default function Checkout() {
   const [isLoading, setIsLoading] = useState(false);
   const [paymentMethod, setPaymentMethod] = useState('cash');
   const { cart, setCart, checkout, payByCash } = useContext(CartContext);
-  const navigate = useNavigate();
+
+  const validationSchema = Yup.object({
+    details: Yup.string().required('Details are required'),
+    phone: Yup.string().required('Phone is required'),
+    city: Yup.string().required('City is required'),
+  });
 
   const formik = useFormik({
     initialValues: {
@@ -18,11 +22,7 @@ export default function Checkout() {
       phone: '',
       city: '',
     },
-    validationSchema: Yup.object({
-      details: Yup.string().required('Details are required'),
-      phone: Yup.string().required('Phone is required'),
-      city: Yup.string().required('City is required'),
-    }),
+    validationSchema,
     onSubmit: async (values) => {
       if (!cart?.cartId) {
         toast.error('No cart items found');
@@ -35,18 +35,15 @@ export default function Checkout() {
         if (paymentMethod === 'online') {
           const { data } = await checkout(
             cart.cartId,
-            `${window.location.origin}/allorders`,
+            '', // خليها فاضية، الباك اند سيرجع URL Stripe أو نكمل للـ allorders
             values
           );
 
           if (data?.status === 'success') {
             if (data.session?.url) {
-              // يروح لـ Stripe checkout
+              // لو فيه Stripe redirect
               window.location.href = data.session.url;
-            } else {
-              // لو Stripe مش موجود، ارجع على allorders
-              navigate('/allorders');
-            }
+            } 
           } else {
             toast.error('Failed to initiate online payment');
           }
@@ -55,7 +52,7 @@ export default function Checkout() {
           if (data?.status === 'success') {
             setCart(null);
             toast.success('Order placed successfully!');
-            navigate('/allorders'); // ارجع مباشرة
+            window.location.assign('/allorders'); // ارجع مباشرة
           }
         }
       } catch (error) {
