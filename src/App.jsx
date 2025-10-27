@@ -1,5 +1,5 @@
 import './App.css'
-import { createBrowserRouter, RouterProvider } from 'react-router-dom'
+import { createHashRouter, RouterProvider } from 'react-router-dom'
 import Layout from './Components/Layout/Layout'
 import Home from './Components/Home/Home'
 import Brand from './Components/Brand/Brand'
@@ -28,125 +28,119 @@ import { Offline } from 'react-detect-offline'
 import Search from './Components/Search/Search'
 import WishList from './Components/Wishlist/Wishlist'
 
-function App() {
-  // يمكن تعديل هذا المتغير ليتناسب مع اسم مشروعك أو حسب بيئة النشر
-  const BASENAME = '/E-ecommerce'
 
-  const route = createBrowserRouter(
-    [
-      {
-        path: '',
-        element: <Layout />,
-        children: [
-          { index: true, element: <Home /> },
-          { path: 'login', element: <Login /> },
-          { path: 'register', element: <Register /> },
-          { path: 'forgetPassword', element: <ForgetPassword /> },
-          { path: 'resetcode', element: <ResetCode /> },
-          { path: 'resetPassword', element: <ResetPassword /> },
-          {
-            path: 'home',
-            element: (
-              <ProtctedRouting>
-                <Home />
-              </ProtctedRouting>
-            ),
-          },
-          {
-            path: 'cart',
-            element: (
-              <ProtctedRouting>
-                <Cart />
-              </ProtctedRouting>
-            ),
-          },
-          {
-            path: 'products',
-            element: (
-              <ProtctedRouting>
-                <Products />
-              </ProtctedRouting>
-            ),
-          },
-          {
-            path: 'categories',
-            element: (
-              <ProtctedRouting>
-                <Categories />
-              </ProtctedRouting>
-            ),
-          },
-          {
-            path: 'productdetails/:id/:category',
-            element: (
-              <ProtctedRouting>
-                <ProductDetails />
-              </ProtctedRouting>
-            ),
-          },
-          {
-            path: 'checkout',
-            element: (
-              <ProtctedRouting>
-                <Checkout />
-              </ProtctedRouting>
-            ),
-          },
-          {
-            path: 'wishlist',
-            element: (
-              <ProtctedRouting>
-                <WishList />
-              </ProtctedRouting>
-            ),
-          },
-          {
-            path: 'search',
-            element: (
-              <ProtctedRouting>
-                <Search />
-              </ProtctedRouting>
-            ),
-          },
-          {
-            path: 'categoryDetails/:id/:category',
-            element: (
-              <ProtctedRouting>
-                <CategoryDetails />
-              </ProtctedRouting>
-            ),
-          },
-          {
-            path: 'allorders',
-            element: (
-              <ProtctedRouting>
-                <AllOrders />
-              </ProtctedRouting>
-            ),
-          },
-          {
-            path: 'brands',
-            element: (
-              <ProtctedRouting>
-                <Brand />
-              </ProtctedRouting>
-            ),
-          },
-          {
-            path: '*',
-            element: (
-              <ProtctedRouting>
-                <NotFound />
-              </ProtctedRouting>
-            ),
-          },
-        ],
-      },
-    ],
+function App() {
+  // لا حاجة لـ basename مع createHashRouter
+  const route = createHashRouter([
     {
-      basename: BASENAME,
-    }
-  )
+      path: '',
+      element: <Layout />,
+      children: [
+        { index: true, element: <Home /> },
+        { path: 'login', element: <Login /> },
+        { path: 'register', element: <Register /> },
+        { path: 'forgetPassword', element: <ForgetPassword /> },
+        { path: 'resetcode', element: <ResetCode /> },
+        { path: 'resetPassword', element: <ResetPassword /> },
+        {
+          path: 'home',
+          element: (
+            <ProtctedRouting>
+              <Home />
+            </ProtctedRouting>
+          ),
+        },
+        {
+          path: 'cart',
+          element: (
+            <ProtctedRouting>
+              <Cart />
+            </ProtctedRouting>
+          ),
+        },
+        {
+          path: 'products',
+          element: (
+            <ProtctedRouting>
+              <Products />
+            </ProtctedRouting>
+          ),
+        },
+        {
+          path: 'categories',
+          element: (
+            <ProtctedRouting>
+              <Categories />
+            </ProtctedRouting>
+          ),
+        },
+        {
+          path: 'productdetails/:id/:category',
+          element: (
+            <ProtctedRouting>
+              <ProductDetails />
+            </ProtctedRouting>
+          ),
+        },
+        {
+          path: 'checkout',
+          element: (
+            <ProtctedRouting>
+              <Checkout />
+            </ProtctedRouting>
+          ),
+        },
+        {
+          path: 'wishlist',
+          element: (
+            <ProtctedRouting>
+              <WishList />
+            </ProtctedRouting>
+          ),
+        },
+        {
+          path: 'search',
+          element: (
+            <ProtctedRouting>
+              <Search />
+            </ProtctedRouting>
+          ),
+        },
+        {
+          path: 'categoryDetails/:id/:category',
+          element: (
+            <ProtctedRouting>
+              <CategoryDetails />
+            </ProtctedRouting>
+          ),
+        },
+        {
+          path: 'allorders',
+          element: (
+            <ProtctedRouting>
+              <AllOrders />
+            </ProtctedRouting>
+          ),
+        },
+        {
+          path: 'brands',
+          element: (
+            <ProtctedRouting>
+              <Brand />
+            </ProtctedRouting>
+          ),
+        },
+        {
+          path: '*',
+          element: (
+            <ProtctedRouting>
+              <NotFound />
+            </ProtctedRouting>
+          ),
+        },
+      ],
+    },
+  ])
 
   const query = new QueryClient()
   return (
