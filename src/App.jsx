@@ -150,7 +150,7 @@ function App() {
                 <UserContextProvider>
                     <CartContextProvider>
                         <CounterContextProvider>
-                            <RouterProvider router={route} basename="/E-ecommerce/" />
+                            <RouterProvider router={route}  />
                             <div className={`fixed start-2 top-16  rounded-md p-4 `}>
                                 <Offline><span className='bg-slate-500'>Your network is offline</span>
                                 </Offline>
