@@ -24,7 +24,6 @@ import ForgetPassword from './Components/ForegetPassword/ForegetPassword'
 import ResetCode from './Components/ResetCode/ResetCode'
 import ResetPassword from './Components/ResetPassword/ResetPassword'
 import CategoryDetails from './Components/CategoryDetails/CategoryDetails'
-import { Offline } from "react-detect-offline";
 import Search from './Components/Search/Search'
 import WishList from './Components/Wishlist/Wishlist'
 
@@ -151,10 +150,7 @@ function App() {
                     <CartContextProvider>
                         <CounterContextProvider>
                             <RouterProvider router={route}  />
-                            <div className={`fixed start-2 top-16  rounded-md p-4 `}>
-                                <Offline><span className='bg-slate-500'>Your network is offline</span>
-                                </Offline>
-                            </div>
+
 
                             <Toaster />
 
