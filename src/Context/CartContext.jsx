@@ -99,7 +99,7 @@ export default function CartContextProvider(props) {
 
     useEffect(()=>{
         getToCart()
-    })
+    },[])
     
     return <CartContext.Provider value={{ addProductToCart ,getCart,removeCart,updateCart,cart, setCart,checkout,payByCash}}>
         {props.children}
