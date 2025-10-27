@@ -42,15 +42,15 @@ export default function Checkout() {
               // فتح صفحة الدفع أونلاين (Stripe)
               window.location.href = data.session.url;
             } else {
-              // لو مفيش Stripe redirect
-                          toast.success("Order placed successfully!");
-
-             window.location.href("/allorders");
+window.location.href = "/allorders";
             }
           } else {
             toast.error("Failed to initiate online payment");
           }
-        } else {
+        }
+        
+        
+        else {
           const { data } = await payByCash(cart.cartId, values);
           if (data?.status === "success") {
             setCart(null);
@@ -58,7 +58,9 @@ export default function Checkout() {
             navigate("/allorders"); 
           }
         }
-      } catch (error) {
+      } 
+      
+      catch (error) {
         console.error("Checkout error:", error);
         toast.error(error.response?.data?.message || "Checkout failed");
       } finally {
