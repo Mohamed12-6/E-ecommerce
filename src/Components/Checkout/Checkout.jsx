@@ -38,7 +38,7 @@ export default function Checkout() {
               window.location.href = data.session.url;
             } else {
               // افتراضي: نروح للصفحة النهائية بعد الدفع
-              window.location.href = window.location.origin + '/E-ecommerce/allorders';
+window.location.href = import.meta.env.BASE_URL + 'allorders';
             }
           } else {
             toast.error('Failed to initiate online payment');
