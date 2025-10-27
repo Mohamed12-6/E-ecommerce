@@ -5,12 +5,11 @@ import { useNavigate } from 'react-router-dom';
 import * as Yup from 'yup';
 import toast from 'react-hot-toast';
 import { Helmet } from 'react-helmet';
-import { checkout, payByCash } from '../../api/checkout'; // تأكد من اسم الملف الصحيح
 
 export default function Checkout() {
   const [isLoading, setIsLoading] = useState(false);
   const [paymentMethod, setPaymentMethod] = useState('cash');
-  const { cart, setCart } = useContext(CartContext);
+  const { cart, setCart,checkout,payByCash } = useContext(CartContext);
   const navigate = useNavigate();
 
   const formik = useFormik({
