@@ -11,7 +11,7 @@ export default function Register() {
     const navigate = useNavigate();
     const [apiError, setApiError] = useState("")
     const [isLoading, setIsLoading] = useState(false)
-    const { setUserLogin } = useContext(UserContext)
+    const { setuserLogin } = useContext(UserContext)
 
     function handleRegister(values) {
         setIsLoading(true)
@@ -19,12 +19,13 @@ export default function Register() {
             .then(resp => {
                 if(resp?.data?.message === "success"){
                     localStorage.setItem("ApiToken", resp.data.token)
-                    setUserLogin(resp.data.token)
+                    setuserLogin(resp.data.token)
                     setIsLoading(false)
                     navigate("/login")
                 }
             })
             .catch(err => {
+                console.log(err)
                 setIsLoading(false)
                 setApiError(err?.response?.data?.message)
             })

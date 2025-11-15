@@ -30,116 +30,32 @@ import WishList from './Components/Wishlist/Wishlist'
 
 function App() {
     const route = createBrowserRouter([
-        {
+       {
+    path: '/',
+    element: <Layout />,
+    children: [
+        { index: true, element: <Home /> },
+        { path: 'login', element: <Login /> },
+        { path: 'register', element: <Register /> },
+        { path: 'forgetPassword', element: <ForgetPassword /> },
+        { path: 'resetcode', element: <ResetCode /> },
+        { path: 'resetPassword', element: <ResetPassword /> },
 
-            path: '',
-            element: <Layout />,
-            children: [
-                { index: true, element: <Home /> },
-                { path: 'login', element: <Login /> },
-                { path: 'register', element: <Register /> },
-                { path: 'forgetPassword', element: <ForgetPassword /> },
-                { path: 'resetcode', element: <ResetCode /> },
-                { path: 'resetPassword', element: <ResetPassword /> },
+        { path: 'home', element: <ProtctedRouting><Home /></ProtctedRouting> },
+        { path: 'cart', element: <ProtctedRouting><Cart /></ProtctedRouting> },
+        { path: 'products', element: <ProtctedRouting><Products /></ProtctedRouting> },
+        { path: 'categories', element: <ProtctedRouting><Categories /></ProtctedRouting> },
+        { path: 'productdetails/:id/:category', element: <ProtctedRouting><ProductDetails /></ProtctedRouting> },
+        { path: 'checkout', element: <ProtctedRouting><Checkout /></ProtctedRouting> },
+        { path: 'wishlist', element: <ProtctedRouting><WishList /></ProtctedRouting> },
+        { path: 'search', element: <ProtctedRouting><Search /></ProtctedRouting> },
+        { path: 'categoryDetails/:id/:category', element: <ProtctedRouting><CategoryDetails /></ProtctedRouting> },
+        { path: 'allorders', element: <ProtctedRouting><AllOrders /></ProtctedRouting> },
+        { path: 'brands', element: <ProtctedRouting><Brand /></ProtctedRouting> },
 
-                {
-                    path: 'home',
-                    element: (
-                        <ProtctedRouting>
-                            <Home />
-                        </ProtctedRouting>
-                    ),
-                },
-                {
-                    path: 'cart',
-                    element: (
-                        <ProtctedRouting>
-                            <Cart />
-                        </ProtctedRouting>
-                    ),
-                },
-                {
-                    path: 'products',
-                    element: (
-                        <ProtctedRouting>
-                            <Products />
-                        </ProtctedRouting>
-                    ),
-                },
-                {
-                    path: 'categories',
-                    element: (
-                        <ProtctedRouting>
-                            <Categories />
-                        </ProtctedRouting>
-                    ),
-                },
-                {
-                    path: 'productdetails/:id/:category',
-                    element: (
-                        <ProtctedRouting>
-                            <ProductDetails />
-                        </ProtctedRouting>
-                    ),
-                },
-                {
-                    path: 'checkout',
-                    element: (
-                        <ProtctedRouting>
-                            <Checkout />
-                        </ProtctedRouting>
-                    ),
-                },
-                {
-                    path: 'wishlist',
-                    element: (
-                        <ProtctedRouting>
-                            <WishList/>
-                        </ProtctedRouting>
-                    ),
-                },
-                {
-                    path: 'search',
-                    element: (
-                        <ProtctedRouting>
-                            <Search />
-                        </ProtctedRouting>
-                    ),
-                },
-                {
-                    path: 'categoryDetails/:id/:category',
-                    element: (
-                        <ProtctedRouting>
-                            <CategoryDetails />
-                        </ProtctedRouting>
-                    ),
-                },
-                {
-                    path: 'allorders',
-                    element: (
-                        <ProtctedRouting>
-                            <AllOrders />
-                        </ProtctedRouting>
-                    ),
-                },
-                {
-                    path: 'brands',
-                    element: (
-                        <ProtctedRouting>
-                            <Brand />
-                        </ProtctedRouting>
-                    ),
-                },
-                {
-                    path: '*',
-                    element: (
-                        <ProtctedRouting>
-                            <NotFound />
-                        </ProtctedRouting>
-                    ),
-                },
-            ],
-        },
+        { path: '*', element: <NotFound /> }
+    ]
+}
     ]);
 
     const query = new QueryClient();
