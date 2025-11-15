@@ -8,43 +8,40 @@ import toast from 'react-hot-toast';
 
 export default function RecentProducts() {
 
-    const { addProductToCart, setCart } = useContext(CartContext);
-    const [currentProductId, setCurrentProductId] = useState(null);
+    const { addProductToCart, setCart } = useContext(CartContext)
+    const [currentProductId, setCurrentProductId] = useState(null)
 
-    // ثابتة - مش بتتعمل كل ريندر
+
     const getAllProduct = useCallback(() => {
         return axios.get("https://ecommerce.routemisr.com/api/v1/products");
     }, []);
 
+
     const { data, isLoading, isError } = useQuery({
         queryKey: ['AllProducts'],
         queryFn: getAllProduct,
-        staleTime: 1000 * 60 * 5,
+        staleTime: 1000 * 60 * 5, 
         retry: 1,
-
-        // ⬇️⬅️ سحب الداتا بشكل أنضف وأخف
-        select: (res) => res.data.data,
     });
 
-    // زرار Add To Cart بلوودر لكل زرار لوحده
+  
     async function AddToCart(productID) {
-        setCurrentProductId(productID);
+        setCurrentProductId(productID)
 
         try {
-            const res = await addProductToCart(productID);
+            let res = await addProductToCart(productID)
 
-            if (res?.data?.status === "success") {
-                setCart(res.data);
-                toast.success(res.data.message);
+            if (res.data.status === "success") {
+                setCart(res.data)
+                toast.success(res.data.message, { duration: 3000 })
             } else {
-                toast.error(res?.data?.message || "Failed to add product");
+                toast.error(res.data.message, { duration: 3000 })
             }
-
         } catch (error) {
-            toast.error("Error adding to cart");
-            return error
+            console.log(error)
+            toast.error("Error adding to cart")
         } finally {
-            setCurrentProductId(null);
+            setCurrentProductId(null)
         }
     }
 
@@ -53,16 +50,13 @@ export default function RecentProducts() {
 
     return (
         <div className='grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 xl:grid-cols-6 gap-4 p-4'>
-            {data?.map((product) => (
+            {data?.data?.data.map((product) => (
                 <div key={product.id}
                     className='relative group overflow-hidden rounded-lg shadow-lg border border-gray-200 hover:shadow-2xl hover:scale-105 transition-transform duration-300 bg-white'>
 
                     <Link to={`/productdetails/${product.id}/${product.category.name}`}>
-                        <img
-                            className="w-full h-48 md:h-56 lg:h-60 object-cover"
-                            src={product.imageCover}
-                            alt={product.title}
-                        />
+                        <img className="w-full h-48 md:h-56 lg:h-60 object-cover"
+                            src={product.imageCover} alt={product.title} />
                     </Link>
 
                     <div className="p-3">
