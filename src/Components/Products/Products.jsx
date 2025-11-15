@@ -10,7 +10,7 @@ import { Helmet } from 'react-helmet';
 export default function Products() {
 
     const { data, isLoading } = useAllProduct()
-    const { addProductToCart } = useContext(CartContext)
+    const { addProductToCart ,setCart} = useContext(CartContext)
     const { addWishlist } = useContext(WishlistContext);
 
     async function addtoWishlist(id) {
@@ -32,11 +32,13 @@ export default function Products() {
         toast.loading('Adding Product To Cart...');
         setTimeout(() => {
             toast.dismiss();
-            if (data.status === 'success') toast.success(data?.message);
+            if (data.status === 'success') {toast.success(data?.message) 
+                setCart(data)}
             else toast.error('Failed to add product.');
         }, 800);
     }
 
+ 
     if (isLoading) {
         return (
             <div className="flex justify-center items-center h-screen">

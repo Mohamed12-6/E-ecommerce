@@ -5,7 +5,7 @@ import { Link } from 'react-router-dom';
 import { Helmet } from 'react-helmet';
 
 export default function Cart() {
-  const { getCart, removeCart, updateCart } = useContext(CartContext);
+  const { getCart, removeCart, updateCart , setCart } = useContext(CartContext);
   const [cartProduct, setCartProduct] = useState([]);
   const [loading, setLoading] = useState(true);
 
@@ -13,12 +13,16 @@ export default function Cart() {
     setLoading(true);
     let res = await getCart();
     setCartProduct(res.data.data);
+
+    console.log(res)
     setLoading(false);
   }
 
   async function deleteCart(productId) {
     let resp = await removeCart(productId);
+        console.log(resp)
     setCartProduct(resp.data.data);
+
   }
 
   async function updateToCart(productId, count) {

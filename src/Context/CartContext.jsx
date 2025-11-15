@@ -25,12 +25,14 @@ export default function CartContextProvider(props) {
         .catch((error) => error)
 
     }
+
+
     function getCart() {
         return axios.get(`https://ecommerce.routemisr.com/api/v1/cart`
         ,{
             headers: headers
         })
-        .then((response)=>{console.log(response)
+        .then((response)=>{
         return response})
 
         .catch((error)=>{console.log(error)
@@ -38,15 +40,37 @@ export default function CartContextProvider(props) {
         
     }
 
-    function removeCart(productId) {
-        return axios.delete(`https://ecommerce.routemisr.com/api/v1/cart/${productId}`,
-            {
-                headers:headers
-            }
-        )
-        .then((response)=>response)
-        .catch((error)=>error)
-    }
+    // function removeCart(productId) {
+    //     return axios.delete(`https://ecommerce.routemisr.com/api/v1/cart/${productId}`,
+    //         {
+    //             headers:headers
+    //         }
+    //     )
+    //     .then((response)=>response)
+    //     .catch((error)=>error)
+    // }
+
+
+    async function removeCart(productId) {
+  try {
+    const response = await axios.delete(
+      `https://ecommerce.routemisr.com/api/v1/cart/${productId}`,
+      { headers }
+    );
+console.log(response)
+    // بعد الحذف — هات الكارت الجديد كامل
+    const updatedCart = await getCart();
+    setCart(updatedCart.data);
+
+    return updatedCart;
+
+  } catch (error) {
+    return error;
+  }
+}
+
+
+
 
     function updateCart(productId,count) {
         return axios.put(`https://ecommerce.routemisr.com/api/v1/cart/${productId}`
@@ -61,6 +85,11 @@ export default function CartContextProvider(props) {
         
         .catch((error)=>error)
     }
+
+
+
+
+
 
     async function getToCart() {
         let response=await getCart()
